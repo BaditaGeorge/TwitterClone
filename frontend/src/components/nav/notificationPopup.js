@@ -4,11 +4,15 @@ import "./NotificationPopup.css";
 
 function Item() {}
 
-export default function NotificationsPopUp() {
-  let arr = [];
-  for (let i = 0; i < 10; i++) {
-    arr.push(`SO much more text thatn something else TextWoWo${i}`);
-  }
+export default function NotificationsPopUp({
+  title = "Text",
+  action = "View More",
+  data = [{ img: "", title: "AA", content: "BB" }],
+  isOpen = false,
+  elementAaction = () => {},
+}) {
+  if (!isOpen) return null;
+
   return (
     <div
       id="cont"
@@ -22,6 +26,8 @@ export default function NotificationsPopUp() {
         borderRadius: "1%",
         overflowY: "scroll",
         scrollbarWidth: "none",
+        backgroundColor: "white",
+        zIndex: '1',
       }}
     >
       <div
@@ -38,16 +44,16 @@ export default function NotificationsPopUp() {
           style={{ marginLeft: "5px", marginTop: "5px" }}
           variant="h6"
         >
-          Text
+          {title}
         </Typography>
         <Button
           style={{ position: "absolute", right: "5px", marginTop: "3px" }}
           variant="outlined"
         >
-          Disabled
+          {action}
         </Button>
       </div>
-      {arr.map((el, index) => (
+      {data.map((el, index) => (
         <div
           className="item"
           key={index}
@@ -58,12 +64,14 @@ export default function NotificationsPopUp() {
             borderBottom: "1px solid black",
             cursor: "pointer",
             position: "relative",
+            zIndex: "2",
           }}
+          onClick={elementAaction}
         >
           <img
-            style={{ position: "absolute", top:"10px", left:"8px" }}
-            alt="notification"
-            src="https://play-lh.googleusercontent.com/x3XxTcEYG6hYRZwnWAUfMavRfNNBl8OZweUgZDf2jUJ3qjg2p91Y8MudeXumaQLily0"
+            style={{ position: "absolute", top: "10px", left: "8px" }}
+            alt=""
+            src={el.img}
             width="35px"
             height="35px"
           />
@@ -76,9 +84,9 @@ export default function NotificationsPopUp() {
                 fontSize: "12px",
               }}
             >
-              Titlu
+              {el.title}
             </h6>
-            <p style={{ marginLeft: "15%", fontSize: "12px" }}>{el}</p>
+            <p style={{ marginLeft: "15%", fontSize: "12px" }}>{el.content}</p>
           </div>
         </div>
       ))}
