@@ -1,0 +1,42 @@
+.feedPageContainer{
+    /* border: 2pX solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.tweetContainer{
+    border: 2pX solid rgb(167, 164, 164);
+    width: 500px;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+}
+.feedContainer{
+    border: 2px solid black;
+    width: 500px;
+    height: 200px;
+}
+.profilePicture{
+    text-align: center;
+    width:90px;
+}
+.tweetTextArea{
+    width:98%;
+    font-size: 24px;
+    resize: none;
+    height: 100px;
+}
+.tweetInformations{
+    width:100%;
+}
+.tweetAddButtons{
+    height: 30px;
+}
+.tweetButtons{
+    background-color: transparent;
+    border: none;
+}
+.deleteImage{
+    top:25px;
+}   

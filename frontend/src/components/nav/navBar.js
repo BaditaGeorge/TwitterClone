@@ -239,7 +239,7 @@ export default function NavBar() {
           anchorEl={anchorEl}
           handleMenuClose={handleMenuClose}
         />
-        <NotificationsPopUp />
+        {/* <NotificationsPopUp /> */}
       </Box>
     </>
   );
