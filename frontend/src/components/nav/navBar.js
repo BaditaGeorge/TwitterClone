@@ -143,6 +143,8 @@ function MobileMenu({
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [showNotifications, setShowNotifications] = React.useState(false);
+  const [showChats, setShowChats] = React.useState(false);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -188,6 +190,12 @@ export default function NavBar() {
                 size="large"
                 aria-label="show 4 new mails"
                 color="inherit"
+                onClick={() => setShowChats((prev) => !prev)}
+                onBlur={() => {
+                  setTimeout(() => {
+                    setShowChats(false);
+                  }, 100);
+                }}
               >
                 <Badge badgeContent={4} color="error">
                   <ChatIcon />
@@ -197,6 +205,12 @@ export default function NavBar() {
                 size="large"
                 aria-label="show 17 new notifications"
                 color="inherit"
+                onClick={() => setShowNotifications((prev) => !prev)}
+                onBlur={() => {
+                  setTimeout(() => {
+                    setShowNotifications(false);
+                  }, 100);
+                }}
               >
                 <Badge badgeContent={17} color="error">
                   <NotificationsIcon />
@@ -239,7 +253,11 @@ export default function NavBar() {
           anchorEl={anchorEl}
           handleMenuClose={handleMenuClose}
         />
-        {/* <NotificationsPopUp /> */}
+        <NotificationsPopUp
+          title={showChats ? "Chats" : "Notifications"}
+          action={showChats ? "Mark as read" : "View More"}
+          isOpen={showChats || showNotifications}
+        />
       </Box>
     </>
   );
