@@ -7,6 +7,7 @@ import LoginForm from "./components/loginForm/loginForm";
 import RegisterForm from "./components/registerForm/registerForm";
 import LandingPage from "./components/landing/landingPage";
 import HomePage from "./components/home/homePage";
+import FeedPage from "./components/feed/feedPage";
 
 import "./App.css";
 import LoadingSpinner from "./components/loading/loadingSpinner";
@@ -52,15 +53,14 @@ function App() {
   useEffect(() => {
     if (tokenState === TokenState.EXPIRED && !showLoader) {
       setShowLoader(true);
-      AuthAPI.refreshToken()
-        .then(([status, data]) => {
-          if(status >= 400) {
-            localStorage.removeItem("token");
-          } else {
-            localStorage.setItem("token", data["token"]);
-          }
-          setShowLoader(false);
-        });
+      AuthAPI.refreshToken().then(([status, data]) => {
+        if (status >= 400) {
+          localStorage.removeItem("token");
+        } else {
+          localStorage.setItem("token", data["token"]);
+        }
+        setShowLoader(false);
+      });
     }
   }, []);
 
@@ -97,6 +97,14 @@ function App() {
             element={
               <ProtectedRoute showLoader={showLoader}>
                 <HomePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute showLoader={showLoader}>
+                <FeedPage />
               </ProtectedRoute>
             }
           />
