@@ -18,7 +18,7 @@ const JWT = {
   checkIfTokenExpired: function (token) {
     try {
       const payload = this.verify(token);
-      return payload.exp - Date.now() / 1000 <= 10;
+      return (payload.exp - Date.now() / 1000) <= 10;
     } catch (error) {
       return null;
     }

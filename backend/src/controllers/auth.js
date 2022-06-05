@@ -80,7 +80,11 @@ authRouter.post("/refresh", (req, res) => {
 
 authRouter.get("/user", (req, res) => {
   UserModel.findOne({ email: "miki1@gmail.com" }, (err, data) => {
-    res.json(data);
+    res.json({
+      email: data.email,
+      name: data.name, 
+      id: data._id,
+    });
   });
 });
 

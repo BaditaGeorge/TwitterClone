@@ -6,12 +6,14 @@ const authMiddleware = require("./middlewares/auth");
 const mongoose = require("mongoose");
 
 const authRouter = require("./controllers/auth");
+const feedRouter = require("./controllers/feed");
 const PORT = 5050;
 
 const server = express();
 
+server.use(express.static('files', {}));
 server.use(cookieParser());
-server.use(express.json());
+server.use(express.json({ limit: '50mb' }));
 server.use(
   express.urlencoded({
     extended: true,
@@ -35,10 +37,14 @@ server.use((req, res, next) => {
 });
 server.use(authMiddleware);
 
-mongoose.connect("mongodb://localhost:27017/chirpper").then(() => {
-  server.use("/auth", authRouter);
+const mongoURL = "mongodb://localhost:27017/chirpper";
+mongoose
+  .connect(mongoURL)
+  .then(() => {
+    server.use("/auth", authRouter);
+    server.use("/feed", feedRouter);
 
-  server.listen(PORT, () => {
-    console.log(`Twitter Clone App listening at http://localhost:${PORT}`);
+    server.listen(PORT, () => {
+      console.log(`Twitter Clone App listening at http://localhost:${PORT}`);
+    });
   });
-});

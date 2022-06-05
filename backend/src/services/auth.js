@@ -2,7 +2,6 @@ const UserModel = require("../models/user");
 const TokenModel = require("../models/token");
 const JWT = require("../utils/jwtUtils");
 const { processMongoError } = require("../utils/processErrors");
-const token = require("../models/token");
 
 const createToken = (user, oldToken = undefined) => {
   return new Promise((resolve, reject) => {

@@ -12,6 +12,7 @@
     display: flex;
     margin-top: 5px;
     flex-direction: row;
+    z-index: 10;
 }
 .feedContainer{
     border: 2px solid black;
@@ -40,4 +41,28 @@
 }
 .deleteImage{
     top:25px;
-}   
+}
+.feedBody {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+.feedBodyLeft {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    background-color: red;
+}
+.feedBodyCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    width: 50%;
+}
+.feedBodyRight {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    background-color: red;
+}

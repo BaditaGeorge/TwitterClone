@@ -5,6 +5,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { AuthAPI } from "../../apis";
+import { userProfileState } from "../../state/atoms";
+import { useRecoilState } from "recoil";
 
 const validationObject = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -21,6 +23,7 @@ const fieldStyle = {
 
 function LoginForm() {
   const navigate = useNavigate();
+  const [profile, setProfile] = useRecoilState(userProfileState);
 
   const onSignInSubmit = (values, { setSubmitting }) => {
     AuthAPI.loginUser(values).then(([status, data]) => {
@@ -28,6 +31,7 @@ function LoginForm() {
         alert(data["message"]);
       } else {
         localStorage.setItem("token", data["token"]);
+        setProfile(data);
         navigate("/home");
       }
     });

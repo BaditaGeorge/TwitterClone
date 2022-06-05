@@ -23,7 +23,7 @@ function HomePage() {
       <button
         onClick={() => {
           AuthAPI.getUser().then(([status, data]) => {
-            console.log(data);
+            navigate("/feed");
           });
         }}
       >

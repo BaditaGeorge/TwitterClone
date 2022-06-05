@@ -14,6 +14,8 @@ import LoadingSpinner from "./components/loading/loadingSpinner";
 import { useEffect, useState } from "react";
 import { isJwtExpired } from "jwt-check-expiration";
 import { AuthAPI } from "./apis";
+import { RecoilRoot, useRecoilState } from "recoil";
+import { userProfileState } from "./state/atoms";
 
 const TokenState = Object.freeze({
   EXPIRED: "expired", // when token is expired
@@ -49,6 +51,7 @@ function PublicRoute({ children }) {
 function App() {
   const tokenState = getTokenState();
   const [showLoader, setShowLoader] = useState(false);
+  const [_, setProfile] = useRecoilState(userProfileState);
 
   useEffect(() => {
     if (tokenState === TokenState.EXPIRED && !showLoader) {
@@ -60,6 +63,14 @@ function App() {
           localStorage.setItem("token", data["token"]);
         }
         setShowLoader(false);
+      });
+    } else {
+      AuthAPI.getUser().then(([status, data]) => {
+        if (status >= 400) {
+          localStorage.removeItem("token");
+        } else {
+          setProfile(data);
+        }
       });
     }
   }, []);
