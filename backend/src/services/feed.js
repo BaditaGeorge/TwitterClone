@@ -15,7 +15,7 @@ const feedService = {
       ChirpModel.find({ ownerID: userID }, (err, data) => {
         if (err) reject(processMongoError(err));
         resolve(data);
-      }).limit(5).skip(page * 5);
+      }).limit(5).skip(page * 5).sort({_id:-1});
     });
   },
 };
