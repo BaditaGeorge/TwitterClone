@@ -9,6 +9,16 @@ const UserSchema = new mongoose.Schema({
     unique: true,
   },
   password: String,
+  avatar: String,
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Likes",
+  }],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Comments",
+  }],
+  followees: [String],
 });
 
-module.exports = mongoose.model("user", UserSchema, "Users");
+module.exports = mongoose.model("Users", UserSchema, "Users");

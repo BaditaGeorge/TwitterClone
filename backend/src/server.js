@@ -20,11 +20,13 @@ server.use(
   })
 );
 
+
 // this are needed because middlewares do not catch options request
 server.options("*", (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Methods", "*");
   res.setHeader("Access-Control-Allow-Credentials", true);
-  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");
   res.end();
 });
 
@@ -33,6 +35,7 @@ server.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("Access-Control-Allow-Methods", "*");
   res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Headers", "X-Requested-With,content-type");
   next();
 });
 server.use(authMiddleware);

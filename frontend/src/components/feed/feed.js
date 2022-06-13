@@ -55,10 +55,14 @@ function FeedBodyCenter() {
       {feed.map((feedEntry) => (
         <FeedCard
           key={feedEntry._id}
+          chirpID={feedEntry._id}
           text={feedEntry.text}
           images={feedEntry.images}
           video={feedEntry.video}
-          owner={user}
+          owner={feedEntry.ownerID}
+          likes={feedEntry.likes}
+          comments={feedEntry.comments}
+          isLiked={feedEntry.isLiked}
         ></FeedCard>
       ))}
       <Button

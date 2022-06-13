@@ -51,7 +51,6 @@
     display: flex;
     flex-direction: column;
     width: 25%;
-    background-color: red;
 }
 .feedBodyCenter {
     display: flex;
@@ -64,5 +63,4 @@
     display: flex;
     flex-direction: column;
     width: 25%;
-    background-color: red;
 }

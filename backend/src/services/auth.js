@@ -37,12 +37,14 @@ const authService = {
 
         createToken(user)
           .then((tokenValue) => {
-            const { _id, name, email } = user;
+            const { _id, name, email, avatar, followees } = user;
             resolve({
               id: _id,
               name: name,
               email: email,
               token: tokenValue,
+              avatar: avatar,
+              followees: followees,
             });
           })
           .catch((err) => {

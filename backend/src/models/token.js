@@ -6,4 +6,4 @@ const TokenSchema = new mongoose.Schema({
     userID: String,
 });
 
-module.exports = mongoose.model('token', TokenSchema, 'Tokens');
+module.exports = mongoose.model('Tokens', TokenSchema, 'Tokens');

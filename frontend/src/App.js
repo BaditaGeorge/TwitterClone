@@ -45,7 +45,7 @@ function ProtectedRoute({ children, showLoader }) {
 
 function PublicRoute({ children }) {
   const isLoggedIn = useIsLoggedIn();
-  return !isLoggedIn ? children : <Navigate to="/home" />;
+  return !isLoggedIn ? children : <Navigate to="/feed" />;
 }
 
 function App() {

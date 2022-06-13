@@ -33,6 +33,7 @@ authRouter.post("/signin", (req, res) => {
 authRouter.post("/signup", (req, res) => {
   const userData = {
     ...req.body,
+    avatar: 'http://localhost:5050/batman.jpg',
     password: produceSHA512(req.body.password),
   };
 
@@ -79,11 +80,13 @@ authRouter.post("/refresh", (req, res) => {
 });
 
 authRouter.get("/user", (req, res) => {
-  UserModel.findOne({ email: "miki1@gmail.com" }, (err, data) => {
+  UserModel.findOne({ _id: req.userID }, (err, data) => {
     res.json({
       email: data.email,
       name: data.name, 
       id: data._id,
+      avatar: data.avatar,
+      followees: data.followees,
     });
   });
 });

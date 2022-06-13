@@ -32,7 +32,6 @@ function LoginForm() {
       } else {
         localStorage.setItem("token", data["token"]);
         setProfile(data);
-        navigate("/home");
       }
     });
   };

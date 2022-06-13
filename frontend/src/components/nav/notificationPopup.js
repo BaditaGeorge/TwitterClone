@@ -27,7 +27,7 @@ export default function NotificationsPopUp({
         overflowY: "scroll",
         scrollbarWidth: "none",
         backgroundColor: "white",
-        zIndex: '1',
+        zIndex: "12",
       }}
     >
       <div

@@ -13,10 +13,8 @@ import Picker from "emoji-picker-react";
 import FeedAPI from "../../apis/feedAPI";
 
 const createChirp = function (data) {
-  console.log(data);
   FeedAPI.createChirp(data).then(([status, data]) => {
-    console.log(status);
-    console.log(data);
+    window.location.reload();
   });
 };
 
@@ -48,7 +46,6 @@ export default function InputPost() {
 
   const height = 400;
   const width = 400;
-  console.log(file);
 
   return (
     <>

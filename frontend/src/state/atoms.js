@@ -5,5 +5,8 @@ export const userProfileState = atom({
   default: {
     name: "",
     email: "",
+    avatar: "",
+    _id: "",
+    followees: [],
   },
 });

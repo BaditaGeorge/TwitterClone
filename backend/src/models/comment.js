@@ -1,9 +1,17 @@
 const mongoose = require("mongoose");
 
 const CommentSchema = new mongoose.Schema({
-    postID: String,
-    userID: String,
+    post: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Chirps",
+    },
     text: String,
+    userAvatar: String,
+    userName: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Users",
+    },
 });
 
-module.exports = mongoose.model("comment", CommentSchema, "Comments");
+module.exports = mongoose.model("Comments", CommentSchema, "Comments");
