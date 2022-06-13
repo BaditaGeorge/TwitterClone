@@ -1,5 +1,6 @@
 const Nanoid = require('nanoid');
 const fs = require('fs');
+const sharp = require('sharp');
 
 const extractData = (url) => {
     const regex = /^data:.+\/(.+);base64,(.*)$/;
@@ -19,7 +20,6 @@ const fileProcessor = (req, res, next) => {
     req.body.images = [];
 
     for(let i=0;i<images.length;i++) {
-
         const nanoID = Nanoid.nanoid();
         const [_, ext, buffer, ...rest] = extractData(images[i]['data_url']);
         const path = `${nanoID}.${ext}`;
