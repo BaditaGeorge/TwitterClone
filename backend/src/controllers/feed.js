@@ -1,6 +1,7 @@
 const express = require("express");
 const feedService = require("../services/feed");
 const fileProcessorMiddleware = require("../middlewares/filesProcessor");
+const socketStore = require("../utils/socketStore");
 
 const feedRouter = express.Router();
 
@@ -20,6 +21,26 @@ feedRouter.post("/chirp", fileProcessorMiddleware, (req, res) => {
       res.statusCode = err.status;
       res.json({ message: err.message });
     });
+});
+
+feedRouter.post("/chirp/:postID/delete", (req, res) => {
+  feedService.removeChirp(req.params['postID']).then((data) => {
+    res.statusCode = 200;
+    res.json(data);
+  }).catch((err) => {
+    res.statusCode = 400;
+    res.json({ message: err.message });
+  })
+});
+
+feedRouter.put("/chirp/:postID", (req, res) => {
+  feedService.updateChirp(req.params['postID'], req.body).then((data) => {
+    res.statusCode = 200;
+    res.json(data);
+  }).catch((err) => {
+    res.statusCode = 500;
+    res.json({ message: err.message });
+  });
 });
 
 feedRouter.get("/", (req, res) => {

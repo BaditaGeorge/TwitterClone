@@ -152,7 +152,7 @@ function MobileMenu({
   );
 }
 
-export default function NavBar() {
+export default function NavBar({ notifications }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [showNotifications, setShowNotifications] = React.useState(false);
@@ -183,11 +183,10 @@ export default function NavBar() {
 
   return (
     <>
-      {" "}
-      <Box sx={{ flexGrow: 1}}>
-        <AppBar position="static">
+      <div>
+        <AppBar position="sticky">
           <Toolbar>
-            <Search>
+            {/* <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
@@ -195,27 +194,12 @@ export default function NavBar() {
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
               />
-            </Search>
+            </Search> */}
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
                 size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-                onClick={() => setShowChats((prev) => !prev)}
-                onBlur={() => {
-                  setTimeout(() => {
-                    setShowChats(false);
-                  }, 100);
-                }}
-              >
-                <Badge badgeContent={4} color="error">
-                  <ChatIcon />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
+                aria-label="show notifications"
                 color="inherit"
                 onClick={() => setShowNotifications((prev) => !prev)}
                 onBlur={() => {
@@ -224,7 +208,7 @@ export default function NavBar() {
                   }, 100);
                 }}
               >
-                <Badge badgeContent={17} color="error">
+                <Badge badgeContent={notifications.length} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
@@ -254,23 +238,24 @@ export default function NavBar() {
             </Box>
           </Toolbar>
         </AppBar>
-        <MobileMenu
-          handleProfileMenuOpen={handleProfileMenuOpen}
-          handleMobileMenuClose={handleMobileMenuClose}
-          isMobileMenuOpen={isMobileMenuOpen}
-          mobileMoreAnchorEl={mobileMoreAnchorEl}
-        />
-        <DesktopMenu
-          isMenuOpen={isMenuOpen}
-          anchorEl={anchorEl}
-          handleMenuClose={handleMenuClose}
-        />
-        <NotificationsPopUp
-          title={showChats ? "Chats" : "Notifications"}
-          action={showChats ? "Mark as read" : "View More"}
-          isOpen={showChats || showNotifications}
-        />
-      </Box>
+      </div>
+      <MobileMenu
+        handleProfileMenuOpen={handleProfileMenuOpen}
+        handleMobileMenuClose={handleMobileMenuClose}
+        isMobileMenuOpen={isMobileMenuOpen}
+        mobileMoreAnchorEl={mobileMoreAnchorEl}
+      />
+      <DesktopMenu
+        isMenuOpen={isMenuOpen}
+        anchorEl={anchorEl}
+        handleMenuClose={handleMenuClose}
+      />
+      <NotificationsPopUp
+        title={showChats ? "Chats" : "Notifications"}
+        action={showChats ? "Mark as read" : "View More"}
+        data={notifications}
+        isOpen={showChats || showNotifications}
+      />
     </>
   );
 }

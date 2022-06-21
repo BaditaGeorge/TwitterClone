@@ -4,6 +4,8 @@ const LikeModel = require("../models/like");
 const CommentModel = require("../models/comment");
 const UserModel = require("../models/user");
 const FollowModel = require("../models/follow");
+const NotificationService = require("./notification");
+const NotificationType = require("../types/notification");
 const mongoose = require("mongoose");
 
 const feedService = {
@@ -11,6 +13,11 @@ const feedService = {
     return new Promise((resolve, reject) => {
       ChirpModel.create(chirpData, (err, data) => {
         if (err) reject(processMongoError(err));
+        NotificationService.createNotification(
+          chirpData.ownerID,
+          (targetUserID = undefined),
+          NotificationType.POST
+        );
         resolve(data);
       });
     });
@@ -53,7 +60,7 @@ const feedService = {
               { _id: postID },
               { $push: { likes: likeData._id } },
               { new: true },
-              (err, data) => {
+              (err, chirpData) => {
                 if (err) reject(processMongoError(err));
                 UserModel.findOneAndUpdate(
                   { _id: userID },
@@ -61,11 +68,16 @@ const feedService = {
                   { new: true },
                   (err, data) => {
                     if (err) reject(processMongoError(err));
+                    NotificationService.createNotification(
+                      userID,
+                      chirpData.ownerID._id,
+                      NotificationType.LIKE
+                    );
                     resolve(likeData);
                   }
                 );
               }
-            );
+            ).populate("ownerID");
           }
         }
       );
@@ -115,7 +127,7 @@ const feedService = {
               { _id: postID },
               { $push: { comments: commData._id } },
               { new: true },
-              (err, data) => {
+              (err, chirpData) => {
                 if (err) reject(processMongoError(err));
                 UserModel.findOneAndUpdate(
                   { _id: userID },
@@ -123,11 +135,18 @@ const feedService = {
                   { new: true },
                   (err, data) => {
                     if (err) reject(processMongoError(err));
-                    else resolve(commData);
+                    else {
+                      NotificationService.createNotification(
+                        userID,
+                        chirpData.ownerID._id,
+                        NotificationType.MESSAGE
+                      );
+                      resolve(commData);
+                    }
                   }
                 );
               }
-            );
+            ).populate("ownerID");
           }
         }
       );
@@ -149,7 +168,14 @@ const feedService = {
               { new: true },
               (err, data) => {
                 if (err) reject(processMongoError(err));
-                else resolve(followData);
+                else {
+                  NotificationService.createNotification(
+                    followerID,
+                    followeeID,
+                    NotificationType.FOLLOW
+                  );
+                  resolve(followData);
+                }
               }
             );
           }
@@ -173,6 +199,27 @@ const feedService = {
               }
             );
           }
+        }
+      );
+    });
+  },
+  removeChirp: function (chirpID) {
+    return new Promise((resolve, reject) => {
+      ChirpModel.deleteOne({ _id: chirpID }, (err) => {
+        if (err) reject(processMongoError);
+        else resolve({});
+      });
+    });
+  },
+  updateChirp: function (chirpID, values) {
+    return new Promise((resolve, reject) => {
+      ChirpModel.findOneAndUpdate(
+        { _id: chirpID },
+        values,
+        { new: true },
+        (err, data) => {
+          if (err) reject(processMongoError(err));
+          else resolve(data);
         }
       );
     });

@@ -7,9 +7,9 @@ function Item() {}
 export default function NotificationsPopUp({
   title = "Text",
   action = "View More",
-  data = [{ img: "", title: "AA", content: "BB" }],
+  data = [{ actorUserAvatar: "", type: "AA", content: "BB" }],
   isOpen = false,
-  elementAaction = () => {},
+  elementAction = () => {},
 }) {
   if (!isOpen) return null;
 
@@ -66,12 +66,12 @@ export default function NotificationsPopUp({
             position: "relative",
             zIndex: "2",
           }}
-          onClick={elementAaction}
+          onClick={elementAction}
         >
           <img
             style={{ position: "absolute", top: "10px", left: "8px" }}
             alt=""
-            src={el.img}
+            src={el.actorUserAvatar}
             width="35px"
             height="35px"
           />
@@ -84,7 +84,7 @@ export default function NotificationsPopUp({
                 fontSize: "12px",
               }}
             >
-              {el.title}
+              {el.type}
             </h6>
             <p style={{ marginLeft: "15%", fontSize: "12px" }}>{el.content}</p>
           </div>

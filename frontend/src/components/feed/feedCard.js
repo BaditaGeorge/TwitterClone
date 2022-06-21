@@ -21,6 +21,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FeedAPI from "../../apis/feedAPI";
+import { Slide } from "react-slideshow-image";
+import "react-slideshow-image/dist/styles.css";
 
 const DEFAULT_AVATAR = "http://localhost:5050/batman.jpg";
 
@@ -110,31 +112,121 @@ function EditModalDialog({
   comments,
   setComments,
   post,
+  images = null,
+  text = null,
+  video = null,
 }) {
+  const [postImages, setPostImages] = React.useState(images);
+  const [postText, setPostText] = React.useState(text);
+  const [postVideo, setPostVideo] = React.useState(video);
   return (
-    <Dialog maxWidth="xl" open={open} onClose={() => setOpen(false)}>
+    <Dialog
+      maxWidth="xl"
+      open={open}
+      onClose={() => {
+        setPostImages(images);
+        setPostText(text);
+        setPostVideo(video);
+        setOpen(false);
+      }}
+    >
       <DialogActions>
-        {/* <Button
-          onClick={() => setOpen(false)}
-          style={{ backgroundColor: "red" }}
-          variant="contained"
-        >
-          Yes
-        </Button> */}
         <Button
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setPostImages(images);
+            setPostText(text);
+            setPostVideo(video);
+            setOpen(false);
+          }}
           style={{ backgroundColor: "blue" }}
           variant="contained"
           autoFocus
         >
           Close
         </Button>
+        <Button
+          onClick={() => {
+            FeedAPI.updateChirp(post, {
+              images: postImages,
+              text: postText,
+              vidoe: postVideo,
+            }).then(([status, data]) => {
+              window.location.reload();
+            });
+          }}
+          variant="contained"
+          autoFocus
+        >
+          Save
+        </Button>
       </DialogActions>
-      <DialogContent style={{ display: "flex", flexDirection: "row" }}>
+      <DialogContent
+        style={{ display: "flex", flexDirection: "row", overflow: "hidden" }}
+      >
+        <div style={{ width: "60vw", height: "70vh" }}>
+          <textarea
+            style={{ resize: "none", width: "100%" }}
+            defaultValue={postText}
+            onChange={(e) => setPostText(e.target.value)}
+          ></textarea>
+          {(postImages.length > 0 || video) && (
+            <div className="slide-container">
+              <Slide>
+                {postImages.map((image, index) => (
+                  <div className="each-slide" key={index}>
+                    <div
+                      style={{
+                        backgroundImage: `url(${image})`,
+                        height: "60vh",
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "contain",
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: "red", margin: "10px" }}
+                        onClick={() => {
+                          setPostImages(
+                            postImages
+                              .filter((postImage) => postImage !== image)
+                              .map((postImage) => postImage)
+                          );
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                {postVideo && (
+                  <div>
+                    <div className="video">
+                      <Button
+                        variant="contained"
+                        style={{ backgroundColor: "red", margin: "10px" }}
+                        onClick={() => {
+                          setPostVideo(null);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                      <CardVideo video={postVideo} />
+                    </div>
+                  </div>
+                )}
+              </Slide>
+            </div>
+          )}
+        </div>
         <div
-          style={{ width: "90vw", height: "70vh", backgroundColor: "red" }}
-        ></div>
-        <div style={{ width: "30vw", height: "70vh", marginLeft: "20px" }}>
+          style={{
+            width: "30vw",
+            height: "70vh",
+            marginLeft: "20px",
+            overflowY: "scroll",
+            overflowX: "hidden",
+          }}
+        >
           <Header owner={owner} userID={userID} />
           <CommentSection
             comments={comments}
@@ -147,7 +239,16 @@ function EditModalDialog({
   );
 }
 
-function ContextMenu({ owner, userID, comments, setComments, post }) {
+function ContextMenu({
+  owner,
+  userID,
+  comments,
+  setComments,
+  post,
+  images = null,
+  text = null,
+  video = null,
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -188,8 +289,9 @@ function ContextMenu({ owner, userID, comments, setComments, post }) {
         >
           <MenuItem
             onClick={() => {
-              setOpenDeleteModal(true);
-              handleClose();
+              FeedAPI.removeChirp(post).then(([status, data]) => {
+                window.location.reload();
+              });
             }}
           >
             Delete
@@ -212,6 +314,9 @@ function ContextMenu({ owner, userID, comments, setComments, post }) {
         comments={comments}
         setComments={setComments}
         post={post}
+        images={images}
+        text={text}
+        video={video}
       />
       <DeleteAlertDialog open={openDeleteModal} setOpen={setOpenDeleteModal} />
     </>
@@ -224,6 +329,11 @@ function Header({
   comments = null,
   setComments = null,
   post = null,
+  images = null,
+  video = null,
+  postLikes = null,
+  setPostLikes = null,
+  text = null,
 }) {
   const [profile, setProfile] = useRecoilState(userProfileState);
   const { followees } = profile;
@@ -286,7 +396,10 @@ function Header({
           userID={userID}
           comments={comments}
           setComments={setComments}
+          video={video}
           post={post}
+          images={images}
+          text={text}
         />
       )}
     </div>
@@ -362,7 +475,7 @@ function InputComment({ post, setComments }) {
         type="text"
         style={{
           height: "100%",
-          width: "30vw",
+          width: "60%",
           resize: "none",
           fontSize: "20px",
         }}
@@ -429,7 +542,12 @@ export default function FeedCard({
         userID={profile.id}
         comments={postComments}
         setComments={setPostComments}
+        video={video}
+        images={images}
+        postLikes={postLikes}
+        setPostLikes={setPostLikes}
         post={chirpID}
+        text={text}
       />
       {images.length > 0 && <CardImages images={images} />}
       {video && <CardVideo video={video} />}

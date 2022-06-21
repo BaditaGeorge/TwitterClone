@@ -55,6 +55,20 @@ const FeedAPI = {
       )
     );
   },
+  removeChirp: function (chirpID) {
+    return processAxiosPromise(
+      axios.post(
+        `${BASE_URL}/chirp/${chirpID}/delete`,
+        {},
+        { withCredentials: true }
+      )
+    );
+  },
+  updateChirp: function (chirpID, data) {
+    return processAxiosPromise(
+      axios.put(`${BASE_URL}/chirp/${chirpID}`, data, { withCredentials: true })
+    );
+  },
 };
 
 export default FeedAPI;

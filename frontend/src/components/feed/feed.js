@@ -1,4 +1,4 @@
-import * as react from "react";
+import React, * as react from "react";
 
 import InputPost from "./inputPost";
 import { userProfileState } from "../../state/atoms";

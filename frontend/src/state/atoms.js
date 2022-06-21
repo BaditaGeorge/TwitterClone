@@ -6,7 +6,7 @@ export const userProfileState = atom({
     name: "",
     email: "",
     avatar: "",
-    _id: "",
+    id: "",
     followees: [],
   },
 });
