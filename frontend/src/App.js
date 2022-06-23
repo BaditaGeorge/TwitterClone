@@ -16,6 +16,8 @@ import { isJwtExpired } from "jwt-check-expiration";
 import { AuthAPI } from "./apis";
 import { RecoilRoot, useRecoilState } from "recoil";
 import { userProfileState } from "./state/atoms";
+import StreamPage from "./components/stream/streamPage";
+import StreamMain from "./components/stream/streamMain";
 
 const TokenState = Object.freeze({
   EXPIRED: "expired", // when token is expired
@@ -116,6 +118,22 @@ function App() {
             element={
               <ProtectedRoute showLoader={showLoader}>
                 <FeedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/streams"
+            element={
+              <ProtectedRoute showLoader={showLoader}>
+                <StreamPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route 
+            path="/stream/:id/:isNew"
+            element={
+              <ProtectedRoute showLoader={showLoader}>
+                <StreamMain />
               </ProtectedRoute>
             }
           />

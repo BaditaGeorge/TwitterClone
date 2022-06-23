@@ -16,6 +16,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { AuthAPI } from "../../apis";
 import NotificationsPopUp from "./notificationPopup";
 import { useNavigate } from "react-router-dom";
+import ContactlessIcon from "@mui/icons-material/Contactless";
+import FeedIcon from "@mui/icons-material/Feed";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -153,6 +155,7 @@ function MobileMenu({
 }
 
 export default function NavBar({ notifications }) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [showNotifications, setShowNotifications] = React.useState(false);
@@ -201,17 +204,39 @@ export default function NavBar({ notifications }) {
                 size="large"
                 aria-label="show notifications"
                 color="inherit"
-                onClick={() => setShowNotifications((prev) => !prev)}
-                onBlur={() => {
-                  setTimeout(() => {
-                    setShowNotifications(false);
-                  }, 100);
+                onClick={() => {
+                  navigate("/feed");
                 }}
               >
-                <Badge badgeContent={notifications.length} color="error">
-                  <NotificationsIcon />
-                </Badge>
+                <FeedIcon />
               </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show notifications"
+                color="inherit"
+                onClick={() => {
+                  navigate("/streams");
+                }}
+              >
+                <ContactlessIcon />
+              </IconButton>
+              {notifications && (
+                <IconButton
+                  size="large"
+                  aria-label="show notifications"
+                  color="inherit"
+                  onClick={() => setShowNotifications((prev) => !prev)}
+                  onBlur={() => {
+                    setTimeout(() => {
+                      setShowNotifications(false);
+                    }, 100);
+                  }}
+                >
+                  <Badge badgeContent={notifications.length} color="error">
+                    <NotificationsIcon />
+                  </Badge>
+                </IconButton>
+              )}
               <IconButton
                 size="large"
                 edge="end"
